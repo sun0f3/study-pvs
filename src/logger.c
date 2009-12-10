@@ -6,6 +6,12 @@ Description: logger.c
 */
 #include "logger.h"
 
+void init_logger(char * logfname)
+{
+}
+
+
+
 int start_logger(char * logfname)
 {
     init_logger(logfname);
