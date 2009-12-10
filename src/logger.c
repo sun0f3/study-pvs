@@ -24,4 +24,9 @@ void stop_logger(void)
     destroy_logger();
 }
 
+void log_string( const char *str )
+{
+    mq_send( logger.mqueue, str, strlen(str)+1, 0 );
+}
+
 
