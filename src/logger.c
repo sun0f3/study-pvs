@@ -30,3 +30,16 @@ void log_string( const char *str )
 }
 
 
+void drop_logs( char *fromfn, char *tofn )
+{
+    char *str = NULL;
+    
+    pthread_mutex_lock(&logger.mutex_log);
+    if (logger.logfd > 0) close( logger.logfd );
+    logger.logfd = -1;
+    asprintf( &str, "cp %s %s", fromfn, tofn );
+    system(str);
+    free(str);
+    open_logf(fromfn);
+    pthread_mutex_unlock(&logger.mutex_log);
+}
