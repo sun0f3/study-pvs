@@ -21,6 +21,10 @@ struct logger_struct {
 } logger;
 
 
-
+int start_logger(char * logfname);
+void stop_logger(void);
+void drop_logs( char *fromfn, char *tofn );
+void log_string( const char *str );
 
 #endif
+
