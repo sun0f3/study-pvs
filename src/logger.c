@@ -15,3 +15,13 @@ int start_logger(char * logfname)
 }
 
 
+void stop_logger(void)
+{
+    void *status;
+    logger.fStop = 1;
+    mqlog("Stopping Logger...");
+    pthread_join(logger.thrd, &status);
+    destroy_logger();
+}
+
+
