@@ -6,10 +6,20 @@ Description: logger.c
 */
 #include "logger.h"
 
+
 void init_logger(char * logfname)
 {
+    struct mq_attr matr;
+    
+    pthread_mutex_init( &logger.mutex_log, NULL );
+    open_logf(logfname);
+    logger.mqueue = mq_open( PMQ_NAME, O_RDWR|O_CREAT, S_IRWXU|S_IRWXG, NULL);
+    mq_getattr( logger.mqueue, &matr );
+    logger.maxsz = matr.mq_msgsize + 10;
+    logger.message_buf = (char *)malloc(logger.maxsz);
+    if (matr.mq_curmsgs) extract_messages();
+    mqlog( "Queue \"%s\":\n\t- stores at most %ld messages\n\t- large at most %ld bytes each\n\t- currently holds %ld messages\n", PMQ_NAME, matr.mq_maxmsg, matr.mq_msgsize, matr.mq_curmsgs);
 }
-
 
 
 int start_logger(char * logfname)
