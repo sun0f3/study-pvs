@@ -7,6 +7,11 @@ Description: Logger.h
 #ifndef _LOGGER_H__
 #define _LOGGER_H__
 
+#include <pthread.h>
+#include <stdlib.h>
+#include <mqueue.h>
+
+
 #define PMQ_NAME "/pop3smq"
 
 struct logger_struct {
@@ -25,6 +30,7 @@ int start_logger(char * logfname);
 void stop_logger(void);
 void drop_logs( char *fromfn, char *tofn );
 void log_string( const char *str );
+
 
 #endif
 

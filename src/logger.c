@@ -4,6 +4,11 @@ Project: POP3 Server
 Company: BMSTU
 Description: logger.c
 */
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdlib.h>
+
 #include "logger.h"
 
 
