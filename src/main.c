@@ -10,7 +10,7 @@ Description: main file pop3server
 #include <signal.h>
 
 #include "logger.h"
-#include "serv.h"
+#include "server.h"
 
 
 int main(int argc, char** argv)
