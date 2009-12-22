@@ -1,0 +1,64 @@
+\input{header.tex}
+
+\begin{document}
+\input{title.tex}
+\tableofcontents
+
+\chapter{Введение}
+Цель работы.\\ Создание POP3 сервера , поддерживающего команды \code{USER, STAT, LIST, RETR, DELE, RSET, QUIT}\\
+Вариант 3.\\ Для работы используется один поток и pselect, для логирования -- второй поток, связь по PosixMQ. 
+
+\chapter{Проектирование реализации протокола}
+\section{Автомат}
+
+\begin{figure}
+\center{\includegraphics[width=1\linewidth]{./automata.png}}
+\caption{Автомат разбора}
+\label{automata:image}
+\end{figure}
+
+\section{Взаимодействие подсистем}
+\begin{figure}
+\center{\includegraphics{./ssystems.png}}
+\caption{Граф взаимодействия подсистем}
+\label{ssystems:image}
+\end{figure}
+
+\chapter{Опиcание программной реализации}
+\section{Графы вызова функций}
+\subsection{Полный граф вызовов}
+\begin{figure}
+\center{\includegraphics[width=1\linewidth]{./everything_scf.png}}
+\caption{Полный граф вызовов}
+\label{everything:image}
+\end{figure}
+
+\chapter{Описание процесса сборки}
+В данной главе описан процесс сборки проекта. Используется система сборки \code{Make}. В корневом каталоге проекта находится \code{Makefile}, содержащий цели для управления компиляцией, тестированием и генерацией отчёта. Этот \code{Makefile} использует несколько дополнительных скриптов и довольно большую логику объвязки. Основные цели:
+
+\begin{enumerate}
+\item \code{clean} --- очистка дирректорий \code{build} и \code{bin}.
+\item \code{tests} --- прогонка системы тестирования и генерация куска отчёта, этому посвящённая.
+\item \code{report} --- сборка отчёта. 
+\end{enumerate}
+
+Таким образом, для сборки всего проекта с нуля необходимо в корневом каталоге (\code{trunk}) выполнить сначала \code{make}, а потом \code{make tests \&\& make report}. Первый скомпилит исполняемый файл, вторая пара соберёт отчёт. В дальнейшем можно использовать только вторую пару комманд, чтобы не пересобирать всё с нуля, или \code{make clean \&\& make \&\& make tests \&\& make report} для пересборки и тестирования в случае изменений в коде.
+
+\begin{figure}
+\center{\includegraphics[width=1\linewidth]{./make_main.png}}
+\caption{Граф по основному Make-файлу}
+\label{make_main:image}
+\end{figure}
+
+\begin{figure}
+\center{\includegraphics[width=1\linewidth]{./make_report.png}}
+\caption{Граф по Make-файлу для генерации отчёта}
+\label{make_report:image}
+\end{figure}
+
+\chapter{Результаты системного тестирования}
+Логи тестов:
+\input{scenarios.tex}
+
+\end{document}
+

@@ -1,0 +1,52 @@
+%% Преамбула TeX-файла
+
+% По госту положен 14-ый шрифт, однако мы возьмём 12-ый.
+
+% 1. Стиль и язык
+%\documentclass [12pt,oneside]{rusthesis} % Стиль (по умолчанию 14pt)
+\documentclass[pdftex,12pt,a4paper]{report}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel}
+
+% 2. Обязательные вещи
+\renewcommand{\labelitemi}{\normalfont\bfseries{--}} % список без номеров
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\newcommand{\code}[1]{\texttt{#1}}
+
+\sloppy
+
+% 3. Добавляем гипертекстовое оглавление в PDF
+\usepackage[
+bookmarks=true, colorlinks=true, unicode=true,
+urlcolor=black,linkcolor=black, anchorcolor=black, c
+itecolor=black, menucolor=black, filecolor=bla,
+]{hyperref}
+
+
+% Прочее, дополнять по вкусу
+\usepackage{graphicx}	% Пакет для включения рисунков
+
+%\usepackage{makecell}
+%\usepackage{multirow}
+%\usepackage{ulem}
+%\usepackage{indentfirst}
+
+%\usepackage[pdftex]{graphicx}
+%\graphicspath{{pic/}}
+%\usepackage{tikz}
+
+% Увы, поля придётся уменьшить из-за листингов.
+\topmargin -1cm
+\oddsidemargin -0.5cm
+\evensidemargin -0.5cm
+\textwidth 17cm
+\textheight 24cm
+
+% Картнки и tikz
+%\usetikzlibrary{snakes,arrows,shapes}
+
+
+
+\Russian 
