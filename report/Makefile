@@ -4,7 +4,7 @@
 
 # основная цель
 SOURCE_DIR := $(PWD)/report
-TARGET := pop3s
+TARGET := report
 PDF := $(SOURCE_DIR)/$(TARGET).pdf
 BIN_DIR := $(PWD)/bin
 BUILD_DIR := $(PWD)/tmp
