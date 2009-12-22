@@ -24,12 +24,11 @@ object_files := $(source_files:.c=.o)
 simplers_cflows := $(wildcard  $(REPORT_DIR)/*.scf)
 cflows := $(simplers_cflows:.scf=_scf.dot)
 CFLOW := cflow --level "0= "
-CFLOW2DOT := python $(PWD)/cflow2dot.py
+CFLOW2DOT := python $(PWD)/scripts/cflow2dot.py
 SIMPLECFLOW := grep -v -f 
-MAKE_GRAPHER := python ./scripts/mkf2dot.py dump
+MAKE_GRAPHER := python $(PWD)/scripts/mkf2dot.py dump
 
 .PHONY: all report clean tests 
-
 
 
 all: $(object_files)
