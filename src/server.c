@@ -79,3 +79,71 @@ void server_start(int port)
     }
 }
 
+int client_add(int fd)
+{
+    struct client *pNewClient = (struct client*)malloc(sizeof(struct client));
+
+    pNewClient->fd = fd;
+    STAILQ_INSERT_TAIL(&server.sclients.cliqueue, pNewClient, next);
+    if (server.sclients.maxfd < fd)
+        server.sclients.maxfd = fd;
+    mqlog( "Client %d added", fd);
+    return fd;
+}
+
+void client_remove(struct client *pClient)
+{
+    int i = 0;
+
+    mqlog( "Client %d remove", pClient->fd);
+    STAILQ_REMOVE(&server.sclients.cliqueue, pClient, client, next);
+    free(pClient);
+}
+
+int client_accept(int serverfd)
+{
+    int i, ret;
+    socklen_t t;
+    struct sockaddr_in remote;
+
+    t = sizeof(remote);
+    ret = accept(serverfd, (struct sockaddr *)&remote, &t);
+    if (ret == -1) {
+        mqlog( "Error while accept()" );
+        exit(1);
+    }
+    mqlog( "Connected %i", ret);
+    return ret;
+}
+
+int pop3_bindsock(int port)
+{
+    int sl, optval = 1;
+    struct sockaddr_in sin;
+
+    if ((sl = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
+        mqlog( "Error while socket() = %d", sl );
+        return -1;
+    }
+
+    memset(&sin, 0, sizeof(struct sockaddr_in));
+    sin.sin_family=AF_INET;
+    sin.sin_port=htons(port);
+    sin.sin_addr.s_addr=htonl(INADDR_ANY);
+    setsockopt(sl, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
+    fcntl(sl, O_NONBLOCK);
+
+    if (bind(sl, (struct sockaddr *)&sin, sizeof(struct sockaddr_in)) == -1) {
+        mqlog( "Error while bind()" );
+        close(sl);
+        return -1;
+    }
+
+    if (listen(sl, DEF_MAXPENDING) == -1) {
+        mqlog( "Error while listen()" );
+        close(sl);
+        return -1;
+    }
+
+    return sl;
+}
