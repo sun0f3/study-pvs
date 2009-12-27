@@ -57,6 +57,24 @@ void log_string( const char *str )
     mq_send( logger.mqueue, str, strlen(str)+1, 0 );
 }
 
+void extract_messages(void)
+{
+    unsigned int sender;
+    struct mq_attr matr;
+    size_t msz;
+    
+    do {    //цикл позволяет "выскрести" все сообщения до проверки на выход
+        msz = mq_receive( logger.mqueue, logger.message_buf, logger.maxsz, &sender );
+        strncat(logger.message_buf, "\n", logger.maxsz);
+        pthread_mutex_lock(&logger.mutex_log);
+        if (logger.logfd > 0) write( logger.logfd, logger.message_buf, strlen(logger.message_buf) );
+        pthread_mutex_unlock(&logger.mutex_log);
+        printf("%s", logger.message_buf);
+        mq_getattr( logger.mqueue, &matr );
+    } while (matr.mq_curmsgs);
+}
+
+
 void *logthread(void *param)
 {
     while ((logger.fStop != 1) && (logger.mqueue > 0)) extract_messages();
