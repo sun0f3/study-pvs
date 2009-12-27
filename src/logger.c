@@ -8,8 +8,15 @@ Description: logger.c
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #include "logger.h"
+
+void open_logf(char *fname );
+void extract_messages(void);
+void *logthread(void *param);
 
 
 void init_logger(char * logfname)
@@ -50,6 +57,19 @@ void log_string( const char *str )
     mq_send( logger.mqueue, str, strlen(str)+1, 0 );
 }
 
+void open_logf(char *fname )
+{
+    char *str;
+    
+    asprintf( &str, "\\begin{verbatim}\n" );
+    if ((logger.logfd = creat(fname, S_IRUSR|S_IWUSR )) < 0)
+        printf( "Fail to create log file '%s'.\n", fname );
+    else
+        write(logger.logfd, str, strlen(str) );
+    free(str);
+}
+
+
 
 void drop_logs( char *fromfn, char *tofn )
 {
@@ -64,3 +84,5 @@ void drop_logs( char *fromfn, char *tofn )
     open_logf(fromfn);
     pthread_mutex_unlock(&logger.mutex_log);
 }
+
+
