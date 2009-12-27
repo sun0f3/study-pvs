@@ -57,6 +57,12 @@ void log_string( const char *str )
     mq_send( logger.mqueue, str, strlen(str)+1, 0 );
 }
 
+void *logthread(void *param)
+{
+    while ((logger.fStop != 1) && (logger.mqueue > 0)) extract_messages();
+    return NULL;
+}
+
 void open_logf(char *fname )
 {
     char *str;
