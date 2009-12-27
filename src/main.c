@@ -18,6 +18,13 @@ void sigstop(int signum)
     server.fStop = 1;
 }
 
+void sigdrop(int signum)
+{
+    mqlog( "Received signal %d. Drop logs to '%s'.", signum, drop_fname);
+    drop_logs( log_fname, drop_fname );
+}
+
+
 
 int main(int argc, char** argv)
 {
