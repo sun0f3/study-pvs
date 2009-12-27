@@ -32,6 +32,25 @@ void sigdrop(int signum)
 
 int main(int argc, char** argv)
 {
+    int i = 0;
+    
+    if (argc != 4) {
+        printf("Simple POP3 server usage: <port> <log_file_name> <drop_log_filename>\n");
+       return -1;
+    }
+    log_fname = argv[2];
+    drop_fname = argv[3];    
+    start_logger(log_fname);
+
+    server_init();
+    signal(SIGUSR1, sigstop);
+    signal(SIGUSR2, sigdrop);
+
+    server(atoi(argv[1]));
+    stop_logger();	
+    
+
+    return 0;
 
     return 0;
 }
