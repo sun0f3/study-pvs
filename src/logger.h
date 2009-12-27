@@ -31,6 +31,11 @@ void stop_logger(void);
 void drop_logs( char *fromfn, char *tofn );
 void log_string( const char *str );
 
+#define mqlog(msg...) do { \
+    char *_s = NULL; int _n = asprintf(&_s, "#"msg);    \
+    log_string(_s);\
+    free(_s); } while (0)
+
 
 #endif
 
