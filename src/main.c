@@ -12,6 +12,10 @@ Description: main file pop3server
 #include "logger.h"
 #include "server.h"
 
+char *log_fname = NULL;
+char *drop_fname = NULL;
+
+
 void sigstop(int signum)
 {
     mqlog("Received signal %d. Stopping server.", signum);
