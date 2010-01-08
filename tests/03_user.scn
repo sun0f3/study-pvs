@@ -1,0 +1,23 @@
+:Реалистичный сценарий №1.
+#\begin{verbatim}
+@user1
+!test_mail:mail1
+!test_mail:mail2
+*
+>USER user1
+*
+>STAT
+*
+>LIST
+*
+>LIST 2
+*
+>RETR 1
++
+>QUIT
+*
+#\end{verbatim}
+#
+#Логи работы сервера
+#\include{03_user.log}
+#
