@@ -1,0 +1,12 @@
+digraph G {
+ accept -> AUTHORIZATION;
+ AUTHORIZATION -> TRANSACTION [label="USER name"];
+ AUTHORIZATION -> disconnect [label="QUIT"];
+ TRANSACTION -> TRANSACTION [label="DELE"];
+ TRANSACTION -> TRANSACTION [label="STAT"];
+ TRANSACTION -> TRANSACTION [label="LIST"];
+ TRANSACTION -> TRANSACTION [label="RETR"];
+ TRANSACTION -> TRANSACTION [label="RSET"];
+ TRANSACTION -> UPDATE [label="QUIT"];
+ UPDATE -> disconnect;
+}

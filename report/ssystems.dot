@@ -1,0 +1,5 @@
+digraph G {
+	main -> select -> MessageQueue;
+	MessageQueue -> "log messages";
+	MessageQueue -> "client requests" -> pop3parser;
+}
