@@ -22,7 +22,7 @@ void *logthread(void *param);
 void init_logger(char * logfname)
 {
     struct mq_attr matr;
-    
+
     pthread_mutex_init( &logger.mutex_log, NULL );
     open_logf(logfname);
     logger.mqueue = mq_open( PMQ_NAME, O_RDWR|O_CREAT, S_IRWXU|S_IRWXG, NULL);
@@ -40,6 +40,14 @@ int start_logger(char * logfname)
     mqlog("Starting logger...");
     logger.fStop = 0;
     return pthread_create(&logger.thrd, NULL, logthread, NULL);
+}
+
+
+void destroy_logger(void)
+{
+    free(logger.message_buf);
+    mq_close(logger.mqueue);
+    if (logger.logfd > 0) close( logger.logfd );
 }
 
 
@@ -62,7 +70,7 @@ void extract_messages(void)
     unsigned int sender;
     struct mq_attr matr;
     size_t msz;
-    
+
     do {    //цикл позволяет "выскрести" все сообщения до проверки на выход
         msz = mq_receive( logger.mqueue, logger.message_buf, logger.maxsz, &sender );
         strncat(logger.message_buf, "\n", logger.maxsz);
@@ -84,7 +92,7 @@ void *logthread(void *param)
 void open_logf(char *fname )
 {
     char *str;
-    
+
     asprintf( &str, "\\begin{verbatim}\n" );
     if ((logger.logfd = creat(fname, S_IRUSR|S_IWUSR )) < 0)
         printf( "Fail to create log file '%s'.\n", fname );
@@ -98,7 +106,7 @@ void open_logf(char *fname )
 void drop_logs( char *fromfn, char *tofn )
 {
     char *str = NULL;
-    
+
     pthread_mutex_lock(&logger.mutex_log);
     if (logger.logfd > 0) close( logger.logfd );
     logger.logfd = -1;
