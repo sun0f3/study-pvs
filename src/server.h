@@ -11,6 +11,8 @@ Description: File for server
 #include <sys/queue.h>
 #include "parser.h"
 
+#define DEF_MAXPENDING 5
+
 
 struct client {
 	STAILQ_ENTRY(client) next;
