@@ -15,8 +15,17 @@ Description: parcer.c
 #include "parser.h"
 
 
-void countMails();
-void UpdateMails(void);
+const struct commands commands[] = {
+    { "USER", processUSER },
+    { "PASS", processSTUB },
+    { "QUIT", processQUIT },
+    { "STAT", processSTAT },
+    { "LIST", processLIST },
+    { "RETR", processRETR },
+    { "DELE", processDELE },
+    { "RSET", processRSET }
+};
+
 
 //флаг fAdded выставляется, если клиент только что был добавлен.
 //По спецификации, мы должны отправить приветствие
@@ -285,7 +294,7 @@ int listMailbox(char *buf){
 					perror("Error reading stat()\n");
 				}
 				mailCount++;
-				sprintf(buf+strlen(buf),"%d %d\n",mailCount,fstat.st_size);
+				sprintf(buf+strlen(buf),"%d %d\n",mailCount,(int)fstat.st_size);
 				pDirEnt = readdir(d);
 			}
 
@@ -352,15 +361,15 @@ int sendMessageFile(int msg_id, int fdw){
 					write(fdw,err,strlen(err));
 				}
 			else if ((fdr = open( fileName, O_RDONLY )) > 0)			{
-				printf("filename:%s, bufsize: %d\n",fileName, fstat.st_size);
+				printf("filename:%s, bufsize: %d\n",fileName, (int)fstat.st_size);
 
 				int res = 0;
 				unsigned char tmpbuf[fstat.st_size];
 
-				sprintf(tmpbuf,"+OK %d octets\r\n",fstat.st_size);
+				sprintf(tmpbuf,"+OK %d octets\r\n",(int)fstat.st_size);
 				write(fdw,tmpbuf,strlen(tmpbuf));
 
-				while ((res = read( fdr, tmpbuf, fstat.st_size-1 )) > 0) {
+				while ((res = read( fdr, tmpbuf, (int)fstat.st_size-1 )) > 0) {
 				    if (tmpbuf[res-1] == 0x0A) res--;
 				    write( fdw, tmpbuf, res );
                 }

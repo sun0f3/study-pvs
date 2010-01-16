@@ -78,14 +78,6 @@ int processRETR(char* buf, int len);
 int processDELE(char* buf, int len);
 int processRSET(char* buf, int len);
 
+void countMails();
+void UpdateMails(void);
 
-const struct commands commands[] = {
-    { "USER", processUSER },
-    { "PASS", processSTUB },
-    { "QUIT", processQUIT },
-    { "STAT", processSTAT },
-    { "LIST", processLIST },
-    { "RETR", processRETR },
-    { "DELE", processDELE },
-    { "RSET", processRSET }
-};
